@@ -1,0 +1,56 @@
+﻿<resources>
+    <string name="app_name">CryptoSasa</string>
+    <string name="action_about">About</string>
+    <string name="action_goto_conversion">Conversion</string>
+    <string name="action_remove_item">Remove</string>
+    <string name="shared_pref_crypto">CRYPTOCOMPARE</string>
+    <string name="empty_view">No items, add \'+\' to get started...</string>
+    <string name="w_main_hint_title">QuickTips</string>
+    <string name="w_main_welcome">Welcome!</string>
+    <string name="gotit_button_text">Got it!</string>
+
+    <string name="w_quick_tips">1. Select your base currency type (BTC/ETH).\n\n
+	2. Select your quote currency from drop down menu (e.g USD, US$).\n\n
+		3. Press add \'+\' button to create your preferred currency tab.\n\n
+        4. Select any currency tab you just created to open the conversion page.\n\n
+        5. Note; you can add or remove as many currency tabs as you wish.
+	</string>
+
+
+    <!-- AboutActivity-->
+    <string name="version_number">Version</string>
+    <string name="about_author">Author: </string>
+    <string name="about_author_names" translatable="false">Levit Nudi</string>
+    <string name="about_affiliation">From Noton Inc, notioninside&#8482;</string>
+    <string name="more_info">More information :</string>
+    <string name="privacy_friendly">This is a simple android application showing the latest exchange rate between cryptocurrencies
+        BTC and ETH and 20 major world currencies.</string>
+    <string name="github" translatable="false"><a href="https://github.com/levitnudi/CryptoSasa">\nProject source code from Github</a></string>
+    <string name="linkein"><a href="https://www.linkedin.com/in/levitnudi/">\nAbout the author (Linkedin)</a></string>
+    <string name="api_url"><a href="https://www.cryptocompare.com/">\nThis application uses CryptoCompare API</a></string>
+
+    <string-array name="currency_array">
+        <item>AED, د.إ</item>
+        <item>AUD, A$</item>
+        <item>BRL, R$</item>
+        <item>CAD, C$</item>
+        <item>CHF, SFr</item>
+        <item>EUR, €</item>
+        <item>GBP, £</item>
+        <item>IDR, Rp</item>
+        <item>INR, ₹</item>
+        <item>JPY, ¥</item>
+        <item>KES, Ksh</item>
+        <item>KRW, ₩</item>
+        <item>NGN, ₦</item>
+        <item>PLN, zł</item>
+        <item>RUB, ₽</item>
+        <item>THB, ฿</item>
+        <item>TRY, ₺</item>
+        <item>TZS, Tsh</item>
+        <item>UAH, ₴</item>
+        <item>USD, US$</item>
+    </string-array>
+
+
+</resources>

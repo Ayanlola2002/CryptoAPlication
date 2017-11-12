@@ -15,39 +15,42 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/CurrencyName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentStart="true"
 
-                android:paddingLeft="@dimen/currency_title_padding"
-                android:paddingRight="@dimen/currency_title_padding"
-                android:paddingTop="@dimen/currency_title_padding"
-                android:textAlignment="center"
-                android:text="Currency Name"
-                android:textColor="@color/primary_text"
-                android:textSize="30dp"/>
+
+            <ImageView
+                android:id="@+id/headerpic"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:scaleType="fitXY" />
+
+
+
+
+
+
+
+
 
             <TextView
                 android:id="@+id/title1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_below="@+id/headerpic"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@id/CurrencyName"
+
                 android:paddingLeft="@dimen/currency_title_padding"
                 android:paddingRight="@dimen/currency_title_padding"
                 android:paddingTop="@dimen/currency_title_padding"
                 android:textAlignment="center"
                 android:text="BTC  : Value"
                 android:textColor="@color/primary_text"
-                android:textSize="30dp"/>
+                android:textSize="20dp"/>
 
             <TextView
                 android:id="@+id/title2"
@@ -64,7 +67,9 @@
                 android:textAlignment="center"
                 android:text="ETH  :  Value"
                 android:textColor="@color/primary_text"
-                android:textSize="30dp"/>
+                android:textSize="20dp"/>
+
+
 
 
 

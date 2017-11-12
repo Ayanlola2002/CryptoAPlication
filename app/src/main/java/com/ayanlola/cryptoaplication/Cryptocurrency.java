@@ -7,14 +7,9 @@ public class Cryptocurrency {
 
     private String BTC;
     private String ETH;
-    private String CurrencyName;
+    private int headerpic;
 
-    public Cryptocurrency(String BTC, String ETH, String CurrencyName)
-    {
-        this.setBTC(BTC);
-        this.setETH(ETH);
-        this.setCurrencyName(CurrencyName);
-    }
+
     public String getBTC() {
         return BTC;
     }
@@ -31,15 +26,11 @@ public class Cryptocurrency {
         this.ETH = ETH;
     }
 
-    public String getCurrencyName() {
-        return CurrencyName;
+    public int getHeaderpic() {
+        return headerpic;
     }
 
-    public void setCurrencyName(String currencyName) {
-        CurrencyName = currencyName;
+    public void setHeaderpic(int headerpic) {
+        this.headerpic = headerpic;
     }
-
-
-
-
 }

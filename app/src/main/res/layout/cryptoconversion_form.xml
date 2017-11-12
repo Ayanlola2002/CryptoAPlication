@@ -36,36 +36,37 @@
             android:orientation="vertical"
             android:paddingTop="30dp">
 
+            <Spinner
+                android:id="@+id/btc_eth_currency"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_view" />
+
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/btctext"
                     android:layout_width="279dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
+                    android:layout_below="@+id/quote_currency"
                     android:layout_weight="1"
                     android:paddingTop="5dp"
-                    android:text="Is your base currency"
+                    android:text="BTC : ----"
+                    android:textSize="20dp"
                     android:textAlignment="center" />
 
-                <EditText
-                    android:id="@+id/quote_currency_conversion"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:singleLine="true"
-                    android:text="loading..."
-                    android:textColor="@color/secondary_text"
-                    android:textAlignment="center"
-                    android:enabled="false"
-                    android:background="@drawable/no_edit_view"
-                    android:focusable="false"/>
+            <TextView
+                android:id="@+id/ethtext"
+                android:layout_width="279dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_below="@+id/btctext"
+                android:layout_weight="1"
+                android:paddingTop="5dp"
+                android:text="ETH  : ----"
+                android:textSize="20dp"
+                android:textAlignment="center" />
 
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-                <EditText
+            <EditText
                     android:id="@+id/base_currency_conversion"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -75,16 +76,13 @@
                     android:background="@drawable/text_views"
                     android:inputType="numberDecimal" />
 
-
-            </android.support.design.widget.TextInputLayout>
-
-                <Button
-                    android:id="@+id/back_btn"
+            <Button
+                    android:id="@+id/convert"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="22dp"
                     android:background="@drawable/back_view_btn"
-                    android:text="Back"
+                    android:text="CONVERT"
                     android:textAllCaps="false"
                     android:textColor="#fff"
                     android:textSize="18sp" />

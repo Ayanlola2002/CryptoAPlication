@@ -55,12 +55,13 @@ public class CryptoHomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_crypto_home);
 
         //populating Cryptocurrency Arraylist with the  cryptocurrency class using a loop
-        for (final String s : currencyvalue = getResources().getStringArray(R.array.currency_array))
-        {
+
+
             Runnable runnable = new Runnable()
             {
                 public void run()
                 {
+                    //count the total number of pictures in an array
                     if (card_count!=currencyList.size())
                     {
                         //to limit the number of requests made, let's stop the runnable once the list size is reached
@@ -75,11 +76,11 @@ public class CryptoHomeActivity extends AppCompatActivity
                                 currency = currencyList.get(currencyvalue.toString().charAt(card_count));
                                 String SELECT_BASE = "";
 
-                                //switch between btc and eth urls depending on base currency
+                                //switch between btc and eth urls depending on bas e currency
                                 if (Coin[card_count].equals("BTC")) {
                                     SELECT_BASE = BTC_CRYPTO_URL;
                                     new HttpRequestTask(
-                                            new HttpRequest(SELECT_BASE + currency.getCurrencyName(), HttpRequest.POST, "{ \"currency\": \"value\" }"),
+                                            new HttpRequest(SELECT_BASE + currency.getHeaderpic(), HttpRequest.POST, "{ \"currency\": \"value\" }"),
                                             new HttpRequest.Handler() {
                                                 @Override
                                                 public void response(HttpResponse response) {
@@ -101,7 +102,7 @@ public class CryptoHomeActivity extends AppCompatActivity
                                 } else {
                                     SELECT_BASE = ETH_CRYPTO_URL;
                                     new HttpRequestTask(
-                                            new HttpRequest(SELECT_BASE + currency.getCurrencyName(), HttpRequest.POST, "{ \"currency\": \"value\" }"),
+                                            new HttpRequest(SELECT_BASE + currency.getHeaderpic(), HttpRequest.POST, "{ \"currency\": \"value\" }"),
                                             new HttpRequest.Handler() {
                                                 @Override
                                                 public void response(HttpResponse response) {
@@ -138,7 +139,7 @@ public class CryptoHomeActivity extends AppCompatActivity
             Cryptocurrency cryptocurrency = new Cryptocurrency(s, nameBTC + " " + valueBTC, nameETH + " " + valueETH);
             card_count++;
             currencyList.add(cryptocurrency);
-        }
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
 

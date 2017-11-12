@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StartActivity">
+        <activity android:name="com.ayanlola.cryptoaplication.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,9 +18,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CryptoConversionActivity" />
+        <activity android:name="com.ayanlola.cryptoaplication.CryptoHomeActivity" />
 
-        <activity android:name=".CryptoHomeActivity" />
+        <activity android:name="com.ayanlola.cryptoaplication.CryptoConversionActivity" />
+
+
     </application>
 
 </manifest>

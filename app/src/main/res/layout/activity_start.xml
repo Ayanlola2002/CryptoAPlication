@@ -106,7 +106,7 @@
                 android:text="@string/more_info" />
 
             <TextView
-                android:id="@+id/authorLinkedin"
+                android:id="@+id/author"
                 android:layout_width="372dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

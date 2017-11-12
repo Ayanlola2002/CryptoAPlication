@@ -54,8 +54,11 @@ public class CryptoHomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crypto_home);
 
-        //populating Cryptocurrency Arraylist with the  cryptocurrency class using a loop
 
+        int[] image_id={R.drawable.aed,R.drawable.aud,R.drawable.brl,R.drawable.cad,R.drawable.chf,
+        R.drawable.eur,R.drawable.gbp,R.drawable.idr,R.drawable.inr,R.drawable.jpy,R.drawable.kes,
+        R.drawable.krw,R.drawable.ngn,R.drawable.pln,R.drawable.rub,R.drawable.thb,R.drawable.try1,
+        R.drawable.tzs,R.drawable.uah,R.drawable.usd};
 
             Runnable runnable = new Runnable()
             {
@@ -76,11 +79,11 @@ public class CryptoHomeActivity extends AppCompatActivity
                                 currency = currencyList.get(currencyvalue.toString().charAt(card_count));
                                 String SELECT_BASE = "";
 
-                                //switch between btc and eth urls depending on bas e currency
+                                //switch between btc and eth urls depending on  currency
                                 if (Coin[card_count].equals("BTC")) {
                                     SELECT_BASE = BTC_CRYPTO_URL;
                                     new HttpRequestTask(
-                                            new HttpRequest(SELECT_BASE + currency.getHeaderpic(), HttpRequest.POST, "{ \"currency\": \"value\" }"),
+                                            new HttpRequest(SELECT_BASE +"BTC", HttpRequest.POST, "{ \"currency\": \"value\" }"),
                                             new HttpRequest.Handler() {
                                                 @Override
                                                 public void response(HttpResponse response) {
@@ -91,7 +94,7 @@ public class CryptoHomeActivity extends AppCompatActivity
                                                                 .replace("{", "").replace("}", "").split(":")[1];
 
 
-                                                        //   Toast.makeText(mContext, card_count+""+currencyList.size() +response.body, Toast.LENGTH_LONG).show();
+
 
                                                     } else {
                                                         Log.e(this.getClass().toString(), "Request unsuccessful: " + response);
@@ -102,7 +105,7 @@ public class CryptoHomeActivity extends AppCompatActivity
                                 } else {
                                     SELECT_BASE = ETH_CRYPTO_URL;
                                     new HttpRequestTask(
-                                            new HttpRequest(SELECT_BASE + currency.getHeaderpic(), HttpRequest.POST, "{ \"currency\": \"value\" }"),
+                                            new HttpRequest(SELECT_BASE +"ETH", HttpRequest.POST, "{ \"currency\": \"value\" }"),
                                             new HttpRequest.Handler() {
                                                 @Override
                                                 public void response(HttpResponse response) {
@@ -136,9 +139,10 @@ public class CryptoHomeActivity extends AppCompatActivity
                     }
                 }
             };
-            Cryptocurrency cryptocurrency = new Cryptocurrency(s, nameBTC + " " + valueBTC, nameETH + " " + valueETH);
+
+           // Cryptocurrency cryptocurrency = new Cryptocurrency( nameBTC + " " + valueBTC, nameETH + " " + valueETH,image_id[position]);
             card_count++;
-            currencyList.add(cryptocurrency);
+           // currencyList.add(cryptocurrency);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -171,6 +175,7 @@ public class CryptoHomeActivity extends AppCompatActivity
         }
 
         @Override
+        //method to create offsets between items
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int position = parent.getChildAdapterPosition(view); // item position
             int column = position % spanCount; // item column
@@ -194,7 +199,7 @@ public class CryptoHomeActivity extends AppCompatActivity
     }
 
     /**
-     * Converting dp to pixel
+     * method for Converting dp to pixel
      */
     private int dpToPx(int dp) {
         Resources r = getResources();

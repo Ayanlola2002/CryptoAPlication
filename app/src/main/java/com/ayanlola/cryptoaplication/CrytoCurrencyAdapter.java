@@ -49,6 +49,7 @@ public class CrytoCurrencyAdapter extends RecyclerView.Adapter<CrytoCurrencyAdap
         this.mContext=ctx;
     }
     @Override
+    // this methos inflates the card layout
     public CurrencyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view=LayoutInflater.from(parent.getContext()).inflate(R.layout.cryptocurrency_card,parent,false);
         sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.shared_pref_crypto), Context.MODE_PRIVATE);
@@ -59,13 +60,14 @@ public class CrytoCurrencyAdapter extends RecyclerView.Adapter<CrytoCurrencyAdap
     }
 
     @Override
+    //this method binds the card information to card at respective position
     public void onBindViewHolder(final CurrencyViewHolder holder, final int position) {
         //initialize 0.00 text with currency name for easy identification
         cryptocurrency = cryptocurrencyList.get(position);
         holder.title.setText(cryptocurrency.getBTC()+" 0.00");
         holder.title.setText(cryptocurrency.getETH()+" 0.00");
         card_count = 0;
-        //to keep updating values on each card, we need to run it
+        //instantiating thread runnable to keep updating values on each card,
         Runnable runnable = new Runnable() {
             public void run() {
                 if (card_count!=cryptocurrencyList.size()) {
@@ -74,7 +76,7 @@ public class CrytoCurrencyAdapter extends RecyclerView.Adapter<CrytoCurrencyAdap
                         Thread.sleep(1000);
                     }
                     catch (InterruptedException e) {
-                        //e.printStackTrace();
+
                     }
                     handler.post(new Runnable(){
                         public void run() {
@@ -164,7 +166,7 @@ public class CrytoCurrencyAdapter extends RecyclerView.Adapter<CrytoCurrencyAdap
 
 
 
-
+//instance to send a request to fetch the crptovalue for various currency as against btc an eth
 
                             new HttpRequestTask(
                                     new HttpRequest(SELECT_BTCBASE, HttpRequest.POST, "{ \"currency\": \"value\" }"),
@@ -216,7 +218,7 @@ public class CrytoCurrencyAdapter extends RecyclerView.Adapter<CrytoCurrencyAdap
         };
         new Thread(runnable).start();
 
-        // loading currency cover using Glide library
+        // loading currency cover using Glide external  library
         Glide.with(mContext).load(cryptocurrency.getHeaderpic()).into(holder.headerpic);
 
 
@@ -226,6 +228,7 @@ public class CrytoCurrencyAdapter extends RecyclerView.Adapter<CrytoCurrencyAdap
 
 
     @Override
+    //this method gets the total card amount on recycler
     public int getItemCount() {
 
         return cryptocurrencyList.size();
@@ -251,7 +254,7 @@ public class CrytoCurrencyAdapter extends RecyclerView.Adapter<CrytoCurrencyAdap
         }
 
 
-        /* The user  clicks  on any  card to go to conversion activity*/
+        /* The user  clicks  on any  card to go to cryptoonversion activity*/
             @Override
         public void onClick(View v) {
 

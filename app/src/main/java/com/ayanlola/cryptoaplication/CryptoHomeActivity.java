@@ -43,10 +43,10 @@ import java.util.List;
 public class CryptoHomeActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private RecyclerView recyclerView;
-    private CurrencyAdapter adapter;
-    private List<Currency> currencyList;
-    Button btn_Add;
-    RadioButton radio_btc, radio_eth;
+    private CryptoCurrencyAdapter adapter;
+    private List<CryptoCurrency> currencyList;
+    Button crypto_btn_Add;
+    RadioButton crypto_radio_btc, crypto_radio_eth;
     SharedPreferences sharedPref = null;
     SharedPreferences.Editor editor = null;
     Spinner base_spinner;
@@ -90,9 +90,9 @@ public class CryptoHomeActivity extends AppCompatActivity implements SharedPrefe
         recyclerView.setAdapter(adapter);
 
 
-        btn_Add = (Button)findViewById(R.id.add_button);
-        radio_btc = (RadioButton)findViewById(R.id.radio_button_btc);
-        radio_eth = (RadioButton)findViewById(R.id.radio_button_eth);
+        btn_Add = (Button)findViewById(R.id.crypto_add_button);
+        radio_btc = (RadioButton)findViewById(R.id.crypto_radio_button_btc);
+        radio_eth = (RadioButton)findViewById(R.id.crypto_radio_button_eth);
 
 
 
@@ -101,7 +101,7 @@ public class CryptoHomeActivity extends AppCompatActivity implements SharedPrefe
         editor = sharedPref.edit();
         loadArray();
 
-        base_spinner = (Spinner) findViewById(R.id.quote_currency);
+        base_spinner = (Spinner) findViewById(R.id.crypto_quote_currency);
         //Spinner counter_spinner = (Spinner) findViewById(R.id.counter_currency);
        // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -135,14 +135,14 @@ public class CryptoHomeActivity extends AppCompatActivity implements SharedPrefe
                String name = base_spinner.getSelectedItem().toString().split(",")[0].replace(" ", "");
                 String symbol = base_spinner.getSelectedItem().toString().split(",")[1].replace(" ", "");
                 if(radio_eth.isChecked()) {
-                    if(!checkIfExists(R.drawable.eth_logo, name)) {
-                        addCard(radio_eth.getText().toString(), name, symbol);
+                    if(!checkIfExists(R.drawable.crypto_eth_logo, name)) {
+                        addCard(crypto_radio_eth.getText().toString(), name, symbol);
                     }else{
                         Toast.makeText(getApplicationContext(), "This card already exists!", Toast.LENGTH_LONG).show();
                     }
-                }else if(radio_btc.isChecked()){
-                    if(!checkIfExists(R.drawable.btc_logo, name)) {
-                        addCard(radio_btc.getText().toString(), name, symbol);
+                }else if(crypto_radio_btc.isChecked()){
+                    if(!checkIfExists(R.drawable.crypto_btc_logo, name)) {
+                        addCard(crypto_radio_btc.getText().toString(), name, symbol);
                     }else{
                             Toast.makeText(getApplicationContext(), "This card already exists!", Toast.LENGTH_LONG).show();
                         }
@@ -151,9 +151,9 @@ public class CryptoHomeActivity extends AppCompatActivity implements SharedPrefe
         });
 
         //Initialize cover image in android.support.design.widget.CollapsingToolbarLayout background
-        ImageView img_cover = (ImageView) findViewById(R.id.backdrop);
+        ImageView img_cover = (ImageView) findViewById(R.id.crypto_backdrop);
         try {
-            Glide.with(this).load(R.drawable.money_mkt).into(img_cover);
+            Glide.with(this).load(R.drawable.crypto_money_mkt).into(img_cover);
 
         } catch (Exception e) {}
 
@@ -172,7 +172,7 @@ public class CryptoHomeActivity extends AppCompatActivity implements SharedPrefe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.crypto_menu_main, menu);
         return true;
     }
 
@@ -184,12 +184,12 @@ public class CryptoHomeActivity extends AppCompatActivity implements SharedPrefe
         int id = item.getItemId();
 
         if (id == R.id.action_about_id) {
-           startActivity(new Intent(CryptoHomeActivity.this, CryptoAboutActivity.class));
+           startActivity(new Intent(CryptoHomeActivity.this, StartActivity.class));
             finish();
             return true;
         }
 
-        if (id == android.R.id.home) {
+        if (id == android.R.id.crypto_home) {
             ////exit application completely and kill all running tasks
             System.exit(0);
             return true;
@@ -199,7 +199,7 @@ public class CryptoHomeActivity extends AppCompatActivity implements SharedPrefe
             Intent sendIntent = new Intent();
             Uri url = Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName());
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "Hi!, I'm using "+getString(R.string.app_name)+" to get the latest exchange rates between cryptocurrencies " +
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "Hi!, I'm using "+getString(R.string.crypto_app_name)+" to get the latest exchange rates between cryptocurrencies " +
                     "BTC and ETH and 20 major world currencies. Get the application here "+url);
             sendIntent.setType("text/plain");
             startActivity(sendIntent);
@@ -216,10 +216,10 @@ public class CryptoHomeActivity extends AppCompatActivity implements SharedPrefe
 
 
     public void showHint(){
-        ViewStub v = (ViewStub) findViewById(R.id.VSFirstTimeProcesses);
+        ViewStub v = (ViewStub) findViewById(R.id.crypto_VSFirstTimeProcesses);
         if (v != null) { // This is to avoid a null pointer when the second time this code is executed (findViewById() returns the view only once)
             mLWelcome = (LinearLayout) v.inflate();
-            ((TextView) mLWelcome.findViewById(R.id.TVFirstTimeText)).setText(getString(R.string.w_quick_tips));
+            ((TextView) mLWelcome.findViewById(R.id.crypto_TVFirstTimeText)).setText(getString(R.string.crypto_w_quick_tips));
 
             int bottomMargin = 0;
             if (Build.VERSION.SDK_INT >= 19)
@@ -306,16 +306,16 @@ public class CryptoHomeActivity extends AppCompatActivity implements SharedPrefe
     /**
      * Adding/Removing currency comparison menu
      */
-    private void addCard(String base_currency, String quote_currency_name, String quote_currency_symbol) {
+    private void addCard(String crypto_base_currency, String crypto_quote_currency_name, String crypto_quote_currency_symbol) {
         int[] base_type = new int[]{
-                R.drawable.btc_logo,
-                R.drawable.eth_logo};
-            if (base_currency.contains("BTC")) {
-                Currency a = new Currency(quote_currency_name, quote_currency_symbol, base_type[0]);
+                R.drawable.crypto_btc_logo,
+                R.drawable.crypto_eth_logo};
+            if (crypto_base_currency.contains("BTC")) {
+                CryptoCurrency a = new CryptoCurrency(crypto_quote_currency_name, crypto_quote_currency_symbol, base_type[0]);
                 currencyList.add(a);
                 saveArray();
-            } else if (base_currency.contains("ETH")) {
-                Currency a = new Currency(quote_currency_name, quote_currency_symbol, base_type[1]);
+            } else if (crypto_base_currency.contains("ETH")) {
+                CryptoCurrency a = new CryptoCurrency(crypto_quote_currency_name, crypto_quote_currency_symbol, base_type[1]);
                 currencyList.add(a);
                 saveArray();
             }
@@ -367,7 +367,7 @@ public class CryptoHomeActivity extends AppCompatActivity implements SharedPrefe
         {
 
             if(!sharedPref.getString("List_"+i, null).equals(null)) {
-                Currency a = new Currency(sharedPref.getString("List_" + i, null).split("#")[0],
+                CryptoCurrency a = new Currency(sharedPref.getString("List_" + i, null).split("#")[0],
                         sharedPref.getString("List_" + i, null).split("#")[1],
                         Integer.parseInt(sharedPref.getString("List_" + i, null).split("#")[2]));
                 currencyList.add(a);
@@ -393,7 +393,7 @@ public class CryptoHomeActivity extends AppCompatActivity implements SharedPrefe
         for(int i=0;i<size;i++)
         {
           if(sharedPref.getString("List_"+i, null).split("#")[2].contains(String.valueOf(thumbnail))
-                  && sharedPref.getString("List_"+i, null).split("#")[0].contains(quote_currency)){
+                  && sharedPref.getString("List_"+i, null).split("#")[0].contains(crypto_quote_currency)){
            checked = true;
           }
 

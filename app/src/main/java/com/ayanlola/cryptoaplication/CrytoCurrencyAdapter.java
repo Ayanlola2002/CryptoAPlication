@@ -41,7 +41,7 @@ import java.util.Random;
 public class CryptoCurrencyAdapter extends RecyclerView.Adapter<CryptoCurrencyAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<Currency> currencyList;
+    private List<CryptoCurrency> currencyList;
     SharedPreferences sharedPref = null;
     SharedPreferences.Editor editor = null;
     public int ITEM_POSITION = 0;
@@ -49,7 +49,7 @@ public class CryptoCurrencyAdapter extends RecyclerView.Adapter<CryptoCurrencyAd
     public String ETH_CRYPTO_URL = "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=";
     Resources res;
     Handler handler = new Handler();
-    Currency currency;
+    CryptoCurrency currency;
     private int card_count = 0;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -65,7 +65,7 @@ public class CryptoCurrencyAdapter extends RecyclerView.Adapter<CryptoCurrencyAd
     }
 
 
-    public CryptoCurrencyAdapter(Context mContext, List<Currency> currencyList) {
+    public CryptoCurrencyAdapter(Context mContext, List<CryptoCurrency> currencyList) {
         this.mContext = mContext;
         this.currencyList = currencyList;
     }
@@ -73,7 +73,7 @@ public class CryptoCurrencyAdapter extends RecyclerView.Adapter<CryptoCurrencyAd
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.currency_card, parent, false);
+                .inflate(R.layout.crypto_currency_card, parent, false);
         sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.shared_pref_crypto), Context.MODE_PRIVATE);
         editor = sharedPref.edit();
         res = mContext.getResources();
@@ -99,7 +99,7 @@ public class CryptoCurrencyAdapter extends RecyclerView.Adapter<CryptoCurrencyAd
                     }
                     handler.post(new Runnable(){
                         public void run() {
-                            currency = currencyList.get(position);
+                            Cryptocurrency = currencyList.get(position);
                             String SELECT_BASE = "";//switch between btc and eth urls depending on base currency on the tab
                             if(currency.getThumbnail()==R.drawable.btc_logo){
                                 SELECT_BASE = BTC_CRYPTO_URL;
@@ -108,7 +108,7 @@ public class CryptoCurrencyAdapter extends RecyclerView.Adapter<CryptoCurrencyAd
                             }
 
                             new HttpRequestTask(
-                                    new HttpRequest(SELECT_BASE+currency.getName(), HttpRequest.POST, "{ \"currency\": \"value\" }"),
+                                    new HttpRequest(SELECT_BASE+Cryptocurrency.getName(), HttpRequest.POST, "{ \"currency\": \"value\" }"),
                                     new HttpRequest.Handler() {
                                         @Override
                                         public void response(HttpResponse response) {
@@ -136,7 +136,7 @@ public class CryptoCurrencyAdapter extends RecyclerView.Adapter<CryptoCurrencyAd
         new Thread(runnable).start();
 
         // loading currency cover using Glide library
-        Glide.with(mContext).load(currency.getThumbnail()).into(holder.thumbnail);
+        Glide.with(mContext).load(Cryptocurrency.getThumbnail()).into(holder.thumbnail);
 
          /* The user can click anywhere on the card; thumbnail, view, etc...
     * It's optional but just to improve userbility we want to open the conversion page on any point clicked*/
@@ -207,7 +207,7 @@ public class CryptoCurrencyAdapter extends RecyclerView.Adapter<CryptoCurrencyAd
                     Intent theIntent = new Intent(mContext, CryptoConversionActivity.class);
                     theIntent.putExtra("crypto_position", ITEM_POSITION);
                     mContext.startActivity(theIntent);
-                    CryptoHomeActivity homeActivity = new HomeActivity();
+                    CryptoHomeActivity homeActivity = new CryptoHomeActivity();
                     CryptohomeActivity.finish();
                     return true;
 

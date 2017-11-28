@@ -15,11 +15,11 @@ import android.widget.TextView;
 /**
  * Created by tunde Ayanlola on 14/10/17.
  */
-public class CryptoAboutActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        startActivity(new Intent(CryptoAboutActivity.this, CryptoHomeActivity.class));
+        startActivity(new Intent(StartActivity.this, CryptoHomeActivity.class));
         finish();
     }
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +40,7 @@ public class CryptoAboutActivity extends AppCompatActivity {
             mainContent.animate().alpha(1).setDuration(2000);
         }
 
-        ((TextView)findViewById(R.id.authorLinkedin)).setMovementMethod(LinkMovementMethod.getInstance());
-        ((TextView)findViewById(R.id.githubURL)).setMovementMethod(LinkMovementMethod.getInstance());
-        ((TextView)findViewById(R.id.apiURL)).setMovementMethod(LinkMovementMethod.getInstance());
-        ((TextView)findViewById(R.id.textFieldVersionName)).setText(BuildConfig.VERSION_NAME);
+
 
         overridePendingTransition(0, 0);
 
@@ -65,7 +62,7 @@ public class CryptoAboutActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            startActivity(new Intent(CryptoAboutActivity.this, CryptoHomeActivity.class));
+            startActivity(new Intent(StartActivity.this, CryptoHomeActivity.class));
             finish();
             return true;
         }

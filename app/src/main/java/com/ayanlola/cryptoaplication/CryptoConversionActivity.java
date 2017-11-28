@@ -23,15 +23,15 @@ import com.apptakk.http_request.HttpResponse;
 import com.bumptech.glide.Glide;
 
 public class CryptoConversionActivity extends AppCompatActivity {
-    Button backBtn;
+    Button crypto_backBtn;
     private String CRYPTO_TYPE = "BTC";
     private int CRYPTO_POSITION =0;
     SharedPreferences sharedPref = null;
     SharedPreferences.Editor editor = null;
-    EditText base_currency, quote_currency;
-    public String BASE_CURRENCY = "BTC";
-    public String QUOTE_CURRENCY = "USD";
-    private String CURRENCY_SYMBOL = "";
+    EditText crypto_base_currency, crypto_quote_currency;
+    public String CRYPTO_BASE_CURRENCY = "BTC";
+    public String CRYPTO_QUOTE_CURRENCY = "USD";
+    private String CRYPTO_CURRENCY_SYMBOL = "";
     public String CRYPTO_URL = "https://min-api.cryptocompare.com/data/price?fsym="+BASE_CURRENCY+"&tsyms="+QUOTE_CURRENCY;
     Resources res;
     @Override
@@ -45,8 +45,8 @@ public class CryptoConversionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.crypto_conversion_form);
 
-        base_currency = (EditText)findViewById(R.id.base_currency_conversion);
-        quote_currency = (EditText)findViewById(R.id.quote_currency_conversion);
+        crypto_base_currency = (EditText)findViewById(R.id.base_currency_conversion);
+        crypto_quote_currency = (EditText)findViewById(R.id.quote_currency_conversion);
 
         sharedPref = getSharedPreferences(getString(R.string.shared_pref_crypto), Context.MODE_PRIVATE);
         editor = sharedPref.edit();
@@ -58,25 +58,25 @@ public class CryptoConversionActivity extends AppCompatActivity {
 
         if (extras != null) {
             CRYPTO_POSITION = extras.getInt("crypto_position");
-            if(Integer.parseInt(sharedPref.getString("List_"+CRYPTO_POSITION, null).split("#")[2])==(R.drawable.btc_logo)){
+            if(Integer.parseInt(sharedPref.getString("List_"+CRYPTO_POSITION, null).split("#")[2])==(R.drawable.crypto_btc_logo)){
                 CRYPTO_TYPE = "BTC";
-                base_currency.setHint("1 "+CRYPTO_TYPE);
-            }else if(Integer.parseInt(sharedPref.getString("List_"+CRYPTO_POSITION, null).split("#")[2])==(R.drawable.eth_logo)){
+                crypto_base_currency.setHint("1 "+CRYPTO_TYPE);
+            }else if(Integer.parseInt(sharedPref.getString("List_"+CRYPTO_POSITION, null).split("#")[2])==(R.drawable.crypto_eth_logo)){
                 CRYPTO_TYPE = "ETH";
-                base_currency.setHint("1 "+CRYPTO_TYPE);
+                crypto_base_currency.setHint("1 "+CRYPTO_TYPE);
             }
 
-            BASE_CURRENCY = CRYPTO_TYPE;
-            CURRENCY_SYMBOL = sharedPref.getString("List_"+CRYPTO_POSITION, null).split("#")[1];
+            CRYPTO_BASE_CURRENCY = CRYPTO_TYPE;
+            CRYPTO_CURRENCY_SYMBOL = sharedPref.getString("List_"+CRYPTO_POSITION, null).split("#")[1];
 
             for(int i=0; i<currArry.length; i++){
 
-                if(currArry[i].split(",")[1].contains(CURRENCY_SYMBOL)){
-                    QUOTE_CURRENCY = currArry[i].split(",")[0];
+                if(currArry[i].split(",")[1].contains(CRYPTO_CURRENCY_SYMBOL)){
+                    CRYPTO_QUOTE_CURRENCY = currArry[i].split(",")[0];
                 }
             }
 
-            CRYPTO_URL = "https://min-api.cryptocompare.com/data/price?fsym="+BASE_CURRENCY+"&tsyms="+QUOTE_CURRENCY;
+            CRYPTO_URL = "https://min-api.cryptocompare.com/data/price?fsym="+CRYPTO_BASE_CURRENCY+"&tsyms="+CRYPTO_QUOTE_CURRENCY;
 
             new HttpRequestTask(
                     new HttpRequest(CRYPTO_URL, HttpRequest.POST, "{ \"currency\": \"value\" }"),
@@ -86,13 +86,13 @@ public class CryptoConversionActivity extends AppCompatActivity {
                             if (response.code == 200) {
                                 String result = response.body.replaceAll("\"", "")
                                         .replace("{", "").replace("}", "").split(":")[1];
-                                if(base_currency.getText().length()==0) {
-                                    quote_currency.setText(CURRENCY_SYMBOL + " " + result);
-                                }else if(base_currency.getText().length()>0){
+                                if(crypto_base_currency.getText().length()==0) {
+                                    crypto_quote_currency.setText(CRYPTO_CURRENCY_SYMBOL + " " + result);
+                                }else if(crypto_base_currency.getText().length()>0){
                                     float initialResult = Float.parseFloat(String.valueOf(result));
                                     float convertedResult = initialResult * Float.parseFloat(String.valueOf(base_currency.getText()));
 
-                                    quote_currency.setText(CURRENCY_SYMBOL + " " + convertedResult);
+                                    crypto_quote_currency.setText(CURRENCY_SYMBOL + " " + convertedResult);
                                 }
 
                             } else {
@@ -104,21 +104,21 @@ public class CryptoConversionActivity extends AppCompatActivity {
         }
 
 
-        ImageView img_cover = (ImageView) findViewById(R.id.currency_img);
+        ImageView img_cover = (ImageView) findViewById(R.id.crypto_currency_img);
 
         try {
             if(CRYPTO_TYPE.contentEquals("ETH")) {
-                Glide.with(this).load(R.drawable.eth_txt).into(img_cover);
+                Glide.with(this).load(R.drawable.crypto_eth_txt).into(img_cover);
             }else  if(CRYPTO_TYPE.contentEquals("BTC")){
-                Glide.with(this).load(R.drawable.btc_txt).into(img_cover);
+                Glide.with(this).load(R.drawable.crypto_btc_txt).into(img_cover);
             }
 
         } catch (Exception e) {}
 
         //add editTextListener to base_currency textView to detect changes and do conversions
-        base_currency.addTextChangedListener(new EditTextListener());
-        backBtn = (Button)findViewById(R.id.back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        crypto_base_currency.addTextChangedListener(new EditTextListener());
+        Crypto_backBtn = (Button)findViewById(R.id.crypto_back_btn);
+        Crypto_backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), CryptoHomeActivity.class));
@@ -147,7 +147,7 @@ public class CryptoConversionActivity extends AppCompatActivity {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             //filter result string to get values as float
-            CRYPTO_URL = "https://min-api.cryptocompare.com/data/price?fsym="+BASE_CURRENCY+"&tsyms="+base_currency.getText().toString()+","+QUOTE_CURRENCY;
+            CRYPTO_URL = "https://min-api.cryptocompare.com/data/price?fsym="+CRYPTO_BASE_CURRENCY+"&tsyms="+crypto_base_currency.getText().toString()+","+CRYPTO_QUOTE_CURRENCY;
             new HttpRequestTask(
                     new HttpRequest(CRYPTO_URL, HttpRequest.POST, "{ \"currency\": \"value\" }"),
                     new HttpRequest.Handler() {
@@ -156,13 +156,13 @@ public class CryptoConversionActivity extends AppCompatActivity {
                             if (response.code == 200) {
                                 String result = response.body.replaceAll("\"", "")
                                         .replace("{", "").replace("}", "").split(":")[1];
-                                if(base_currency.getText().length()==0) {
-                                    quote_currency.setText(CURRENCY_SYMBOL + " " + result);
-                                }else if(base_currency.getText().length()>0){
+                                if(crypto_base_currency.getText().length()==0) {
+                                    crypto_quote_currency.setText(CURRENCY_SYMBOL + " " + result);
+                                }else if(crypto_base_currency.getText().length()>0){
                                     float initialResult = Float.parseFloat(String.valueOf(result));
-                                    float convertedResult = initialResult * Float.parseFloat(String.valueOf(base_currency.getText()));
+                                    float convertedResult = initialResult * Float.parseFloat(String.valueOf(crypto_base_currency.getText()));
 
-                                    quote_currency.setText(CURRENCY_SYMBOL + " " + convertedResult);
+                                    crypto_quote_currency.setText(CURRENCY_SYMBOL + " " + convertedResult);
                                 }
 
                             } else {

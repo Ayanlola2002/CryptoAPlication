@@ -32,7 +32,7 @@ public class CryptoConversionActivity extends AppCompatActivity {
     public String CRYPTO_BASE_CURRENCY = "BTC";
     public String CRYPTO_QUOTE_CURRENCY = "USD";
     private String CRYPTO_CURRENCY_SYMBOL = "";
-    public String CRYPTO_URL = "https://min-api.cryptocompare.com/data/price?fsym="+BASE_CURRENCY+"&tsyms="+QUOTE_CURRENCY;
+    public String CRYPTO_URL = "https://min-api.cryptocompare.com/data/price?fsym="+CRYPTO_BASE_CURRENCY+"&tsyms="+CRYPTO_QUOTE_CURRENCY;
     Resources res;
     @Override
     public void onBackPressed(){
@@ -53,7 +53,7 @@ public class CryptoConversionActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         res = getResources();
-        String[] currArry = res.getStringArray(R.array.currency_array);
+        String[] currArry = res.getStringArray(R.array.crypto_currency_array);
 
 
         if (extras != null) {

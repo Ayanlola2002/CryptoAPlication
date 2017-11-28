@@ -1,36 +1,40 @@
-package com.ayanlola.cryptoaplication;
+package com.ayanlola.cryptoapplication;
 
 /**
- * Created by Levit Nudi on 14/10/17.
+ * Created by tunde ayanlola on 19/11/17.
  */
-public class Cryptocurrency {
+public class CryptoCurrency {
+    private String name;
+    private String symbol;
+    private int thumbnail;
 
-    private String BTC;
-    private String ETH;
-    private int headerpic;
-
-
-    public String getBTC() {
-        return BTC;
+    public CryptoCurrency(String name, String symbol, int thumbnail) {
+        this.name = name;
+        this.symbol = symbol;
+        this.thumbnail = thumbnail;
     }
 
-    public void setBTC(String BTC) {
-        this.BTC = BTC;
+    public String getName() {
+        return name;
     }
 
-    public String getETH() {
-        return ETH;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setETH(String ETH) {
-        this.ETH = ETH;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
-    public int getHeaderpic() {
-        return headerpic;
+    public String getSymbol() {
+        return symbol;
     }
 
-    public void setHeaderpic(int headerpic) {
-        this.headerpic = headerpic;
+    public int getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(int thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

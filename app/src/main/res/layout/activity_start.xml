@@ -30,11 +30,11 @@
                 android:layout_weight="0.36">
 
                 <ImageView
-                    android:id="@+id/crypto_sasa_logo"
+                    android:id="@+id/crypto_logo"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/cryptosasa_logo" />
+                    android:src="@drawable/crypto_logo" />
 
             </LinearLayout>
 
@@ -55,12 +55,6 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center">
 
-                <TextView
-                    android:id="@+id/textFieldVersion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/version_number" />
 
 
 
@@ -104,15 +98,6 @@
                 android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:text="@string/more_info" />
-
-            <TextView
-                android:id="@+id/author"
-                android:layout_width="372dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/linkein"
-                android:textAlignment="center"
-                android:textStyle="bold" />
 
 
             <Button

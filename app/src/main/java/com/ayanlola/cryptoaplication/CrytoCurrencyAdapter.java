@@ -1,14 +1,17 @@
-package com.ayanlola.cryptoaplication;
+package com.ayanlola.cryptoapplication;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-
+import android.os.AsyncTask;
 import android.os.Handler;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,18 +23,25 @@ import com.apptakk.http_request.HttpRequestTask;
 import com.apptakk.http_request.HttpResponse;
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
-
-
-
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.Random;
 
 /**
- * Created by mrtunde on 11/5/2017.
+ * Created by tunde ayanlola on 14/10/17.
  */
 
-public class CrytoCurrencyAdapter extends RecyclerView.Adapter<CrytoCurrencyAdapter.CurrencyViewHolder> {
+public class CryptoCurrencyAdapter extends RecyclerView.Adapter<CryptoCurrencyAdapter.MyViewHolder> {
+
     private Context mContext;
-    private ArrayList<Cryptocurrency> cryptocurrencyList;
+    private List<Currency> currencyList;
     SharedPreferences sharedPref = null;
     SharedPreferences.Editor editor = null;
     public int ITEM_POSITION = 0;
@@ -39,170 +49,77 @@ public class CrytoCurrencyAdapter extends RecyclerView.Adapter<CrytoCurrencyAdap
     public String ETH_CRYPTO_URL = "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=";
     Resources res;
     Handler handler = new Handler();
-    Cryptocurrency cryptocurrency;
+    Currency currency;
     private int card_count = 0;
 
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView title;
+        public ImageView thumbnail, overflow;
 
-    public CrytoCurrencyAdapter(ArrayList<Cryptocurrency> cryptocurrencyList, Context ctx)
-    {
-        this.cryptocurrencyList=cryptocurrencyList;
-        this.mContext=ctx;
+        public MyViewHolder(View view) {
+            super(view);
+            title = (TextView) view.findViewById(R.id.title);
+            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            overflow = (ImageView) view.findViewById(R.id.overflow);
+        }
     }
+
+
+    public CryptoCurrencyAdapter(Context mContext, List<Currency> currencyList) {
+        this.mContext = mContext;
+        this.currencyList = currencyList;
+    }
+
     @Override
-    // this methos inflates the card layout
-    public CurrencyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view=LayoutInflater.from(parent.getContext()).inflate(R.layout.cryptocurrency_card,parent,false);
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.currency_card, parent, false);
         sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.shared_pref_crypto), Context.MODE_PRIVATE);
         editor = sharedPref.edit();
         res = mContext.getResources();
-        CurrencyViewHolder currencyViewHolder=new CurrencyViewHolder(view);
-        return currencyViewHolder;
+        return new MyViewHolder(itemView);
     }
 
     @Override
-    //this method binds the card information to card at respective position
-    public void onBindViewHolder(final CurrencyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         //initialize 0.00 text with currency name for easy identification
-        cryptocurrency = cryptocurrencyList.get(position);
-        holder.title.setText(cryptocurrency.getBTC()+" 0.00");
-        holder.title.setText(cryptocurrency.getETH()+" 0.00");
+        currency = currencyList.get(position);
+        holder.title.setText(currency.getName()+" 0.00");
         card_count = 0;
-        //instantiating thread runnable to keep updating values on each card,
+        //to keep updating values on each card, we need to run it
         Runnable runnable = new Runnable() {
             public void run() {
-                if (card_count!=cryptocurrencyList.size()) {
+                if (card_count!=currencyList.size()) {
                     //to limit the number of requests made, let's stop the runnable once the list size is reached
                     try {
                         Thread.sleep(1000);
                     }
                     catch (InterruptedException e) {
-
+                        //e.printStackTrace();
                     }
                     handler.post(new Runnable(){
                         public void run() {
-                            cryptocurrency = cryptocurrencyList.get(position);
-                            String SELECT_BTCBASE = "";
-                            String SELECT_ETHBASE="";//switch between btc and eth urls depending on base currency on the tab
-                            if(cryptocurrency.getHeaderpic()==R.drawable.aed){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"AED";
-                                SELECT_ETHBASE = ETH_CRYPTO_URL+"AED";
-
+                            currency = currencyList.get(position);
+                            String SELECT_BASE = "";//switch between btc and eth urls depending on base currency on the tab
+                            if(currency.getThumbnail()==R.drawable.btc_logo){
+                                SELECT_BASE = BTC_CRYPTO_URL;
+                            }else{
+                                SELECT_BASE = ETH_CRYPTO_URL;
                             }
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.aud){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"AUD";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"AUD";}
-
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.brl){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"BRL";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"BRL";}
-
-                                 else if(cryptocurrency.getHeaderpic()==R.drawable.chf){
-                                    SELECT_BTCBASE = BTC_CRYPTO_URL+"CHF";
-                                    SELECT_ETHBASE = ETH_CRYPTO_URL+"CHF";}
-
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.eur){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"EUR";
-                                SELECT_ETHBASE = ETH_CRYPTO_URL+"EUR";}
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.gbp){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"GBP";
-                                SELECT_ETHBASE = ETH_CRYPTO_URL+"GBP";}
-
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.idr){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"IDR";
-                                SELECT_ETHBASE = ETH_CRYPTO_URL+"IDR";}
-
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.inr){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"INR";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"INR";}
-
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.jpy){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"JPY";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"JPY";}
-
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.kes){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"KES";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"KES";}
-
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.krw){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"KRW";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"KRW";}
-
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.ngn){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"NGN";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"NGN";}
-
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.pln){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"PLN";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"PLN";}
-
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.rub){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"RUB";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"RUB";}
-
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.thb){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"THB";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"THB";}
-
-                            else if (cryptocurrency.getHeaderpic()==R.drawable.)
-                            {
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"TRY";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"TRY";
-                            }
-
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.tzs)
-                            {
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"TZS";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"TZS";}
-
-                            else if(cryptocurrency.getHeaderpic()==R.drawable.uah){
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"UAH";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"UAH";}
-
-                            else
-                            {
-                                SELECT_BTCBASE = BTC_CRYPTO_URL+"USD";
-                                SELECT_BTCBASE = ETH_CRYPTO_URL+"USD";
-                            }
-
-
-
-//instance to send a request to fetch the crptovalue for various currency as against btc an eth
 
                             new HttpRequestTask(
-                                    new HttpRequest(SELECT_BTCBASE, HttpRequest.POST, "{ \"currency\": \"value\" }"),
+                                    new HttpRequest(SELECT_BASE+currency.getName(), HttpRequest.POST, "{ \"currency\": \"value\" }"),
                                     new HttpRequest.Handler() {
                                         @Override
                                         public void response(HttpResponse response) {
                                             if (response.code == 200) {
-                                                String btcname = response.body.replaceAll("\"", "")
+                                                String name = response.body.replaceAll("\"", "")
                                                         .replace("{", "").replace("}", "").split(":")[0];
-                                                String btcvalue = response.body.replaceAll("\"", "")
+                                                String value = response.body.replaceAll("\"", "")
                                                         .replace("{", "").replace("}", "").split(":")[1];
-                                                holder.title.setText(btcname+" "+btcname);
+                                               holder.title.setText(name+" "+value);
                                                 card_count++;
-                                                //   Toast.makeText(mContext, card_count+""+currencyList.size() +response.body, Toast.LENGTH_LONG).show();
-
-                                            } else {
-                                                Log.e(this.getClass().toString(), "Request unsuccessful: " + response);
-                                                Toast.makeText(mContext, "error, check your internet connection!", Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                    }).execute();
-
-
-                            new HttpRequestTask(
-                                    new HttpRequest(SELECT_ETHBASE, HttpRequest.POST, "{ \"currency\": \"value\" }"),
-                                    new HttpRequest.Handler() {
-                                        @Override
-                                        public void response(HttpResponse response) {
-                                            if (response.code == 200) {
-                                                String ethname = response.body.replaceAll("\"", "")
-                                                        .replace("{", "").replace("}", "").split(":")[0];
-                                                String ethvalue = response.body.replaceAll("\"", "")
-                                                        .replace("{", "").replace("}", "").split(":")[1];
-                                                holder.title.setText(ethname+" "+ethvalue);
-                                                card_count++;
-                                                //   Toast.makeText(mContext, card_count+""+currencyList.size() +response.body, Toast.LENGTH_LONG).show();
+                                             //   Toast.makeText(mContext, card_count+""+currencyList.size() +response.body, Toast.LENGTH_LONG).show();
 
                                             } else {
                                                 Log.e(this.getClass().toString(), "Request unsuccessful: " + response);
@@ -218,52 +135,107 @@ public class CrytoCurrencyAdapter extends RecyclerView.Adapter<CrytoCurrencyAdap
         };
         new Thread(runnable).start();
 
-        // loading currency cover using Glide external  library
-        Glide.with(mContext).load(cryptocurrency.getHeaderpic()).into(holder.headerpic);
+        // loading currency cover using Glide library
+        Glide.with(mContext).load(currency.getThumbnail()).into(holder.thumbnail);
 
+         /* The user can click anywhere on the card; thumbnail, view, etc...
+    * It's optional but just to improve userbility we want to open the conversion page on any point clicked*/
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent theIntent = new Intent(mContext, CryptoConversionActivity.class);
+                theIntent.putExtra("crypto_position", position);
+                mContext.startActivity(theIntent);
+                CryptoHomeActivity cryptohomeActivity = new CryptoHomeActivity();
+                cryptohomeActivity.finish();
+
+            }
+        });
+
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(mContext, holder.title.getText()+" is the title", Toast.LENGTH_LONG).show();
+                Intent theIntent = new Intent(mContext, CryptoConversionActivity.class);
+                theIntent.putExtra("crypto_position", position);
+                mContext.startActivity(theIntent);
+                CryptoHomeActivity cryptohomeActivity = new CryptoHomeActivity();
+                cryptohomeActivity.finish();
+
+            }
+        });
+
+        holder.overflow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopupMenu(holder.overflow);
+                //record the position of clicked item to access it from the PopupMenu
+                ITEM_POSITION = position;
+            }
+        });
 
 
     }
 
+    /**
+     * Showing popup menu when tapping on 3 dots
+     */
+    private void showPopupMenu(View view) {
+        // inflate menu
+        PopupMenu popup = new PopupMenu(mContext, view);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.menu_currency, popup.getMenu());
+        popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
+        popup.show();
+    }
+
+    /**
+     * Click listener for popup menu items
+     */
+    class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
+
+        public MyMenuItemClickListener() {
+
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.action_conversion:
+
+                    Intent theIntent = new Intent(mContext, CryptoConversionActivity.class);
+                    theIntent.putExtra("crypto_position", ITEM_POSITION);
+                    mContext.startActivity(theIntent);
+                    CryptoHomeActivity homeActivity = new HomeActivity();
+                    CryptohomeActivity.finish();
+                    return true;
+
+                case R.id.action_remove:
+                    //delete and refresh the list to effect the changes
+                    //the shared preferenceListener methon in HomeActivity will update UI once an item has been removed
+                    int count  = currencyList.size()-1;//our new List_size will be initial size - 1;
+                    currencyList.remove(ITEM_POSITION);
+
+                    for(int i = 0; i< currencyList.size(); i++)
+                    {
+                            editor.remove("List_" + i);
+                            editor.putString("List_" + i, currencyList.get(i).getName() + "#" +currencyList.get(i).getSymbol() + "#" + currencyList.get(i).getThumbnail());
+
+
+                    }
+                    editor.putInt("List_size", count);
+                    editor.commit();
+                    Toast.makeText(mContext, "Deleted!", Toast.LENGTH_SHORT).show();
+                    return true;
+                default:
+            }
+            return false;
+        }
+    }
 
     @Override
-    //this method gets the total card amount on recycler
     public int getItemCount() {
-
-        return cryptocurrencyList.size();
-    }
-
-
-
-    public static class CurrencyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView title, title2;
-        public ImageView headerpic;
-        ArrayList<Cryptocurrency> cryptocurrencyList = new ArrayList<Cryptocurrency>();
-        Context ctx;
-
-        public CurrencyViewHolder(View view) {
-            super(view);
-            this.cryptocurrencyList = cryptocurrencyList;
-            this.ctx = ctx;
-            view.setOnClickListener(this);
-            title = (TextView) view.findViewById(R.id.title);
-            title2 = (TextView) view.findViewById(R.id.title2);
-            headerpic = (ImageView) view.findViewById(R.id.headerpic);
-
-        }
-
-
-        /* The user  clicks  on any  card to go to cryptoonversion activity*/
-            @Override
-        public void onClick(View v) {
-
-            int position = getAdapterPosition();
-            Cryptocurrency cryptocurrency = this.cryptocurrencyList.get(position);
-            Intent intent = new Intent(this.ctx, CryptoConversionActivity.class);
-            intent.putExtra("btc", cryptocurrency.getBTC());
-            intent.putExtra("eth", cryptocurrency.getETH());
-            intent.putExtra("CurrencyName", cryptocurrency.getHeaderpic());
-        }
+        return currencyList.size();
     }
 }
